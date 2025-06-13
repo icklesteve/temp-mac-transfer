@@ -5,7 +5,7 @@ on:
     types: [opened, reopened, unlabeled]
 
 jobs:
-  check-label-required:
+  check-new-pr-label-required:
     if github.event_name == 'pull_request' 
     runs-on: ubuntu-latest
     steps:
