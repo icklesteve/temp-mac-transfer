@@ -1,11 +1,12 @@
-name: Re-add New PR Label if removed within 24h
+name: Add New PR Label
 
 on:
   pull_request:
     types: [opened, reopened, unlabeled]
 
 jobs:
-  check-label-removal:
+  check-label-required:
+    if github.event_name == 'pull_request' 
     runs-on: ubuntu-latest
     steps:
       - name: Check PR creation time
