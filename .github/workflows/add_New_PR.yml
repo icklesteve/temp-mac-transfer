@@ -23,30 +23,4 @@ jobs:
           script: |
             const labelToRemove = 'New PR';
 
-            const prs = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open',
-              per_page: 100
-            });
-
-            const now = new Date();
-
-            for (const pr of prs.data) {
-              const createdAt = new Date(pr.created_at);
-              const hoursSinceCreation = (now - createdAt) / (1000 * 60 * 60);
-
-              if (hoursSinceCreation > 1) {
-                const labels = pr.labels.map(l => l.name);
-                if (labels.includes(labelToRemove)) {
-                  console.log(`Removing "${labelToRemove}" from PR #${pr.number} (created ${hoursSinceCreation.toFixed(2)} hours ago)`);
-
-                  await github.rest.issues.removeLabel({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: pr.number,
-                    name: labelToRemove
-                  });
-                }
-              }
-            }
+            console.log(`More than 24 hours since PR creation. No action taken.`);
