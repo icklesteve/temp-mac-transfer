@@ -14,13 +14,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  remove-old-newpr-labels:
+  old-version-of-remove-old-newpr-labels:
     runs-on: ubuntu-latest
     steps:
-      - name: Remove "New PR" label if PR is older than 24 hours
+      - name: Old version of Remove "New PR" label if PR is older than 24 hours
         uses: actions/github-script@v7
         with:
           script: |
             const labelToRemove = 'New PR';
 
-            console.log(`More than 24 hours since PR creation. No action taken.`);
+            console.log(`Old version test.`);
