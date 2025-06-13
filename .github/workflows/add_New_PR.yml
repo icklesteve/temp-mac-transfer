@@ -68,11 +68,14 @@ jobs:
             const labelName = 'New PR';
             const created = new Date(pr.created_at);
             const now = new Date();
+            echo "After new date"
             // Less than 24 hours old?
             # if ((now - created) < 24 * 60 * 60 * 1000) {
             if ((now - created) < 15 * 60 * 1000) { # 15 mins
+              echo "Remove"
               - uses: PauMAVA/add-remove-label-action@v1.0.3
                 with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
                   add: New PR
             }
+            echo "After Readd script"
