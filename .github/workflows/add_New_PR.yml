@@ -34,17 +34,17 @@ jobs:
               per_page: 100
             });
             # console.log(`Found PRs.`);
-            const now = new Date();
-            for (const pr of prs) {
-              const created = new Date(pr.created_at);
-              const hasLabel = pr.labels.some(label => label.name === labelName);
-              # if (hasLabel && (now - created) > 24 * 60 * 60 * 1000) {
-              if (hasLabel && (now - created) > 15 * 60 * 1000) { # 15 mins
-                await github.rest.issues.removeLabel({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: pr.number,
-                  name: labelName
-                });
-              }
-            }
+            # const now = new Date();
+            # for (const pr of prs) {
+            #   const created = new Date(pr.created_at);
+            #  const hasLabel = pr.labels.some(label => label.name === labelName);
+            #  if (hasLabel && (now - created) > 24 * 60 * 60 * 1000) {
+            #  if (hasLabel && (now - created) > 15 * 60 * 1000) { # 15 mins
+            #    await github.rest.issues.removeLabel({
+            #      owner: context.repo.owner,
+            #       repo: context.repo.repo,
+            #      issue_number: pr.number,
+            #      name: labelName
+            #    });
+            #  }
+            #}
