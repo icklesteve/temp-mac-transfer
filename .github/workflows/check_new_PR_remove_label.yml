@@ -2,12 +2,10 @@ name: Re-add New PR Label if removed within 24h
 
 on:
   pull_request:
-    types:
-      - unlabeled
+    types: [opened, reopened, unlabeled]
 
 jobs:
   check-label-removal:
-    # if: github.event.label.name == 'New PR'
     runs-on: ubuntu-latest
     steps:
       - name: Check PR creation time
@@ -23,7 +21,7 @@ jobs:
 
             const hoursSinceCreation = (now - createdAt) / (1000 * 60 * 60);
 
-            if (hoursSinceCreation <= 24) {
+            if (hoursSinceCreation <= 1) {
               console.log(`Adding Label "${labelName}".`);
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
