@@ -1,27 +1,36 @@
-name: Re-add "New PR" Label if Removed Early
+name: Re-add New PR Label if removed within 24h
 
 on:
   pull_request:
-    types: [unlabeled]
+    types:
+      - unlabeled
 
 jobs:
-  readd-label:
-  uses: actions/github-script@v7
-  if: github.event.label.name == 'New PR'
-  with:
-    github-token: ${{ secrets.GITHUB_TOKEN }}
-    script: |
-      const pr = context.payload.pull_request;
-      const labelName = 'New PR';
-      const created = new Date(pr.created_at);
-      const now = new Date();
-      // Less than 24 hours old?
-      if ((now - created) < 24 * 60 * 60 * 1000) {
-        await github.rest.issues.addLabels({
-          owner: context.repo.owner,
-          repo: context.repo.repo,
-          issue_number: pr.number,
-          labels: [labelName]
-        });
-      }
+  check-label-removal:
+    if: github.event.label.name == 'New PR'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR creation time
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const labelName = context.payload.label.name;
 
+            const createdAt = new Date(pr.created_at);
+            const now = new Date();
+
+            const hoursSinceCreation = (now - createdAt) / (1000 * 60 * 60);
+
+            if (hoursSinceCreation <= 24) {
+              console.log(`Label "${labelName}" was removed within 24 hours of PR creation. Re-adding it.`);
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: [labelName]
+              });
+            } else {
+              console.log(`More than 24 hours since PR creation. No action taken.`);
+            }
