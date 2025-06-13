@@ -6,25 +6,21 @@ on:
 
 jobs:
   readd-label:
-    runs-on: ubuntu-latest
-    if: github.event.label.name == 'New PR'
-    steps:
-      - name: Check PR age and re-add label if < 24 hours
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const pr = github.event.pull_request;
-            const labelName = 'New PR';
-            const created = new Date(pr.created_at);
-            const now = new Date();
-            // Less than 24 hours old?
-            # if ((now - created) < 24 * 60 * 60 * 1000) {
-            if ((now - created) < 15 * 60 * 1000) { # 15 mins
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: pr.number,
-                labels: [labelName]
-              });
-            }
+  uses: actions/github-script@v7
+  with:
+    github-token: ${{ secrets.GITHUB_TOKEN }}
+    script: |
+      const pr = context.payload.pull_request;
+      const labelName = 'New PR';
+      const created = new Date(pr.created_at);
+      const now = new Date();
+      // Less than 24 hours old?
+      if ((now - created) < 24 * 60 * 60 * 1000) {
+        await github.rest.issues.addLabels({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          issue_number: pr.number,
+          labels: [labelName]
+        });
+      }
+
