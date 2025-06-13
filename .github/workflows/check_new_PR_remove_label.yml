@@ -79,12 +79,12 @@ jobs:
             }
 
   do-not-merge:
-    if: ${{ contains(github.event.*.labels.*.name, 'do not merge') }}
+    if: ${{ contains(github.event.*.labels.*.name, 'New PR') }}
     name: Prevent Merging
     runs-on: ubuntu-latest
     steps:
       - name: Check for label
         run: |
-          echo "Pull request is labeled as 'do not merge'"
+          echo "Pull request is labeled as 'New PR'"
           echo "This workflow fails so that the pull request cannot be merged"
           exit 1
