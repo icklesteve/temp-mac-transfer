@@ -56,7 +56,6 @@ jobs:
               }
             }
 
-jobs:
   readd-label:
     runs-on: ubuntu-latest
     if: github.event.label.name == 'New PR'
