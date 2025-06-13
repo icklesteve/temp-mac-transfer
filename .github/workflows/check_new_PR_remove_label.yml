@@ -1,4 +1,4 @@
-name: Add New PR Label
+name: New PR
 
 on:
   pull_request:
