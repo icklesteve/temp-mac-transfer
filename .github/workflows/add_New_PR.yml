@@ -20,7 +20,7 @@ jobs:
 
       # Remove "New PR" label after 24 hours (scheduled job)
       - name: Remove "New PR" label if PR is older than 24 hours
-        console.log( github.event_name);
+
         if: github.event_name == 'schedule'
         uses: actions/github-script@v7
         with:
