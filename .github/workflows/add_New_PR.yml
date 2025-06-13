@@ -26,14 +26,14 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const labelName = "New PR";
-            console.log(`Finding PRs with Label "${labelName}".`);
+            # console.log(`Finding PRs with Label "${labelName}".`);
             const { data: prs } = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: "open",
               per_page: 100
             });
-            console.log(`Found PRs.`);
+            # console.log(`Found PRs.`);
             const now = new Date();
             for (const pr of prs) {
               const created = new Date(pr.created_at);
