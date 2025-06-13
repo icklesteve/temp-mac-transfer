@@ -5,8 +5,8 @@ on:
     types: [opened, reopened, unlabeled]
 
 jobs:
-  check-label-required:
-    if: github.event_name == 'pull_request' 
+  check-add-new-pr-label:
+    # if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Check PR creation time
