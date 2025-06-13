@@ -37,7 +37,6 @@ jobs:
                 issue_number: pr.number,
                 labels: [labelName]
               });
-              exit 1
             } else {
               console.log(`More than 24 hours since PR creation. No action taken.`);
             }
