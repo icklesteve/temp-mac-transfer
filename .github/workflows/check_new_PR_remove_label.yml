@@ -6,7 +6,7 @@ on:
 
   schedule:
     # - cron: '0 * * * *' # Runs every hour
-    - cron: '10,21,47 * * * *' # Runs every 30 mins
+    - cron: '10,22,34,46,58 * * * *' # Runs every 12 mins
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
