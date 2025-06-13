@@ -17,7 +17,6 @@ jobs:
   maybe-remove-label:
     runs-on: ubuntu-latest
     steps:
-
       # Remove "New PR" label after 24 hours (scheduled job)
       - name: Remove "New PR" label if PR is older than 24 hours
         # if: github.event_name == 'schedule'
