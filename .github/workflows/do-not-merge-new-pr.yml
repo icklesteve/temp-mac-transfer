@@ -5,12 +5,12 @@ on:
     types: [synchronize, opened, reopened, labeled, unlabeled]
 
 jobs:
-  do-not-merge:
-    if: ${{ contains(github.event.*.labels.*.name, 'New PR') }}
-    name: Prevent Merging
+  prevent-merge-new-pr:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'New PR') }}
+    name: Prevent New PRs Merging
     runs-on: ubuntu-latest
     steps:
-      - name: Check for label
+      - name: PR has New PR label.
         run: |
           echo "Pull request is labeled as 'New PR'"
           exit 1
