@@ -77,3 +77,13 @@ jobs:
                 }
               }
             }
+
+  prevent-merge-new-pr:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'New PR') }}
+    name: Prevent New PRs Merging 2
+    runs-on: ubuntu-latest
+    steps:
+      - name: PR has New PR label2.
+        run: |
+          echo "Pull request is labeled as 'New PR' 2"
+          exit 1
