@@ -3,17 +3,25 @@ name: Do Not Merge
 on:
   pull_request:
     types: [synchronize, opened, reopened, labeled, unlabeled]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
   prevent-merge-new-pr:
-    if: contains( github.event.pull_request.labels.*.name, 'New PR')
     name: Prevent New PRs Merging
     runs-on: ubuntu-latest
     steps:
-      - name: PR has New PR label.
+      - name: Get PR labels
+        id: get-labels
+        run: |
+          LABELS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                     -H "Accept: application/vnd.github+json" \
+                     "${{ github.event.pull_request._links.self.href }}/labels" \
+                   | jq -r '.[].name' | tr '\n' ' ')
+          echo "Labels on PR: $LABELS"
+          echo "labels=$LABELS" >> "$GITHUB_OUTPUT"
+
+      - name: Fail if 'New PR' label exists
+        if: contains(steps.get-labels.outputs.labels, 'New PR')
         run: |
           echo "::error::❌ This pull request is labeled 'New PR' and cannot be merged."
           exit 1
