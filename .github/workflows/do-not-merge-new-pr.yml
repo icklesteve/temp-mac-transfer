@@ -1,3 +1,10 @@
+name: Do Not Merge
+
+on:
+  pull_request:
+    types: [synchronize, opened, reopened, labeled, unlabeled]
+  workflow_dispatch:
+
 jobs:
   prevent-merge-new-pr:
     name: Prevent New PRs Merging
