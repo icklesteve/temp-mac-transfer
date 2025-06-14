@@ -12,6 +12,10 @@ on:
   workflow_dispatch:
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
   check-add-new-pr-label:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
