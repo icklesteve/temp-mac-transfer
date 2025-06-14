@@ -15,5 +15,5 @@ jobs:
     steps:
       - name: PR has New PR label.
         run: |
-          echo "Pull request is labeled as 'New PR'"
+          echo "::error::❌ This pull request is labeled 'New PR' and cannot be merged."
           exit 1
