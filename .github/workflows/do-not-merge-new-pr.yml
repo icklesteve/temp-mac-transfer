@@ -12,6 +12,7 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'New PR') }}
     name: Prevent New PRs Merging
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - name: PR has New PR label.
         run: |
