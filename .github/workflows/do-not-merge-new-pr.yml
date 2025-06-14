@@ -9,7 +9,7 @@ on:
 
 jobs:
   prevent-merge-new-pr:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'New PR') }}
+    if: ${{ contains(github.event.pull_request.labels.*.name, "New PR") }}
     name: Prevent New PRs Merging
     runs-on: ubuntu-latest
     continue-on-error: true
