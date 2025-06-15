@@ -19,7 +19,7 @@ jobs:
   check-add-new-pr-label:
     if: github.event_name == 'pull_request'
     call-add-new-pr-label:
-    uses: ./.github/workflows/add_New_PR_label.yaml
+    uses: ./.github/workflows/add_New_PR_label.yml
 
   check-remove-newpr-labels:
     runs-on: ubuntu-latest
