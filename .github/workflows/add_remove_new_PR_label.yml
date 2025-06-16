@@ -20,10 +20,13 @@ jobs:
     uses: ./.github/workflows/add_New_PR_label.yml
 
   check-remove-newpr-labels:
-    if: ${{ github.event_name == 'schedule' }}
-    needs: ./.github/workflows/remove_New_PR_label.yml
+    needs: remove-new-pr-label-job
     uses: ./.github/workflows/do-not-merge-new-pr.yml
 
   block-merge-new-pr:
     needs: check-add-new-pr-label
     uses: ./.github/workflows/do-not-merge-new-pr.yml
+
+  remove-new-pr-label-job:
+    if: ${{ github.event_name == 'schedule' }}
+    uses: ./.github/workflows/remove_New_PR_label.yml
