@@ -24,5 +24,4 @@ jobs:
 
   block-merge-new-pr:
     needs: check-add-new-pr-label
-    needs: check-remove-newpr-labels
     uses: ./.github/workflows/do-not-remove-new-pr.yml
