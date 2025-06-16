@@ -1,4 +1,4 @@
-name: New PR Label
+name: New PR
 
 on:
   pull_request:
@@ -16,10 +16,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
   check-add-new-pr-label: # Adds label if PR < time
-    if: github.event_name == 'pull_request'
+    # if: github.event_name == 'pull_request'
     uses: ./.github/workflows/add_New_PR_label.yml
 
   check-remove-newpr-labels:
+    if: ${{ github.event_name == 'schedule' }}
+    
     uses: ./.github/workflows/remove_New_PR_label.yml
 
   block-merge-new-pr:
