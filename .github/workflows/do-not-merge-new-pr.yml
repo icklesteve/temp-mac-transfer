@@ -4,8 +4,8 @@ on:
   workflow_call:
 
 jobs:
-  prevent-merge-new-pr:
-    name: Prevent New PRs Merging
+  test-response:
+    name: Debug API Response
     runs-on: ubuntu-latest
     steps:
       - name: Debug API response
