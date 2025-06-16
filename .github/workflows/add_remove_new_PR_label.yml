@@ -22,7 +22,7 @@ jobs:
   check-remove-newpr-labels:
     uses: ./.github/workflows/remove_New_PR_label.yml
 
-  block-merge-new-pr
+  block-merge-new-pr:
     needs: check-add-new-pr-label
     needs: check-remove-newpr-labels
     uses: ./.github/workflows/do-not-remove-new-pr.yml
