@@ -2,6 +2,8 @@ name: Do Not Merge
 
 on:
   workflow_call:
+  pull_request:
+    types: [unlabeled, labeled]
 
 jobs:
   test-response:
