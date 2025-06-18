@@ -1,6 +1,7 @@
 name: Do Not Merge
 
 on:
+  workflow_call:
   pull_request:
     types: [labeled, unlabeled, synchronize, opened, reopened]
 
