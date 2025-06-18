@@ -37,18 +37,6 @@ jobs:
                     issue_number: pr.number,
                     name: labelToRemove
                   });
-                  
-                  await github.rest.actions.createWorkflowDispatch({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    workflow_id: 'do-not-merge-new-pr.yml',
-                    ref: context.ref.replace('refs/heads/', ''),
-                    inputs: {
-                      pr.number
-                    }
-                  });
-                  
-                  
                 }
               }
             }
