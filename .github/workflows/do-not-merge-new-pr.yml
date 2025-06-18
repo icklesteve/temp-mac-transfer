@@ -1,11 +1,8 @@
 name: Do Not Merge
 
 on:
-  workflow_call:
-    inputs:
-      pr_number:
-        required: true
-        type: number
+  pull_request:
+    types: [labeled, unlabeled, synchronize, opened, reopened]
 
 jobs:
   prevent-merge-new-pr:
@@ -17,14 +14,14 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const pr_number = ${{ inputs.pr_number }};
+            const pr = context.payload.pull_request;
             const labels = await github.rest.issues.listLabelsOnIssue({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: pr_number
+              issue_number: pr.number
             });
             const labelNames = labels.data.map(l => l.name);
-            console.log("Labels on PR #" + pr_number + ":", labelNames);
+            console.log("Labels on PR #" + pr.number + ":", labelNames);
             return labelNames;
 
       - name: Fail if 'New PR' label exists
