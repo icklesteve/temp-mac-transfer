@@ -1,4 +1,4 @@
-name: New BR
+name: New PR
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ jobs:
   check-pr:
     runs-on: ubuntu-latest
     env:
-      PR_LABEL: 'New BR'
+      PR_LABEL: 'New PR'
       BLOCK_HOURS: '0.5'
 
     steps:
@@ -50,13 +50,12 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const core = require('@actions/core');
             const pr = context.payload.pull_request;
             const labelToCheck = process.env.PR_LABEL;
             const labels = pr.labels.map(l => l.name);
 
             if (labels.includes(labelToCheck)) {
-              core.setFailed(`❌ This pull request is a "${labelToCheck}" so cannot be merged.`);
+              throw `❌ This pull request is labeled "${labelToCheck}" and cannot be merged.`;
             } else {
               console.log('✅ PR is mergeable.');
             }
