@@ -1,0 +1,62 @@
+name: New BR
+
+on:
+  pull_request:
+    types: [opened, reopened, labeled, unlabeled]
+
+jobs:
+  check-pr:
+    runs-on: ubuntu-latest
+    env:
+      PR_LABEL: 'New BR'
+      BLOCK_HOURS: '0.5'
+
+    steps:
+      - name: Check PR creation time and add label if recent
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const prNumber = context.payload.pull_request.number;
+            const labelName = process.env.PR_LABEL;
+            const hoursLimit = parseFloat(process.env.BLOCK_HOURS);
+
+            const { data: pr } = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: prNumber
+            });
+
+            const now = new Date();
+            const createdAt = new Date(pr.created_at);
+            const ageInHours = (now - createdAt) / (1000 * 60 * 60);
+            const labelNames = pr.labels.map(l => l.name);
+
+            if (ageInHours <= hoursLimit && !labelNames.includes(labelName)) {
+              console.log(`🔖 Adding label "${labelName}" to PR #${prNumber} as less than ${ageInHours.toFixed(2)}h old.`);
+              await github.rest.issues.addLabels({
+                owner,
+                repo,
+                issue_number: prNumber,
+                labels: [labelName]
+              });
+            } else {
+              console.log(`ℹ️ PR #${prNumber} is ${ageInHours.toFixed(2)}h old or already labeled.`);
+            }
+
+      - name: Block merging if PR has restricted label
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const core = require('@actions/core');
+            const pr = context.payload.pull_request;
+            const labelToCheck = process.env.PR_LABEL;
+            const labels = pr.labels.map(l => l.name);
+
+            if (labels.includes(labelToCheck)) {
+              core.setFailed(`❌ This pull request is a "${labelToCheck}" so cannot be merged.`);
+            } else {
+              console.log('✅ PR is mergeable.');
+            }
