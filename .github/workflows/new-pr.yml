@@ -52,9 +52,14 @@ jobs:
           script: |
             const pr = context.payload.pull_request;
             const labelToCheck = process.env.PR_LABEL;
-            const labels = pr.labels.map(l => l.name);
+            const labels = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number
+            });
+            const labelNames = labels.data.map(l => l.name);
 
-            if (labels.includes(labelToCheck)) {
+            if (labelNames.includes(labelToCheck)) {
               throw `❌ This pull request is labeled "${labelToCheck}" and cannot be merged.`;
             } else {
               console.log('✅ PR is mergeable.');
