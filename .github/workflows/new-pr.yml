@@ -61,7 +61,7 @@ jobs:
 
             // 2. Block merging if label is present
             if (labelNames.includes(labelName)) {
-              throw `❌ This pull request is a "${labelName}" and cannot be merged until ${hoursLimit} hours after creation.`;
+                core.setFailed(`❌ This pull request is a "${labelName}" and cannot be merged until ${hoursLimit} hours after creation.`);
             } else {
               console.log('✅ PR is mergeable.');
             }
