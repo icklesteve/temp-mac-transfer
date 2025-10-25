@@ -10,7 +10,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  check-new-pr:
+  check-pr:
     runs-on: ubuntu-latest
     env:
       PR_LABEL: 'New PR'
