@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PR_LABEL: 'New PR'
-      BLOCK_HOURS: '0.5'
+      BLOCK_HOURS: '0.15'
 
     steps:
       - name: Check PR age, label if recent, and block merging if labeled
