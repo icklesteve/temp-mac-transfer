@@ -39,7 +39,7 @@ jobs:
               repo,
               pull_number: prNumber
             });
-            const labelNames = await getPrLabels(owner, repo, prNumber);
+            let labelNames = await getPrLabels(owner, repo, prNumber);
 
             // 1. Add label if PR is new and not already labeled
             const now = new Date();
