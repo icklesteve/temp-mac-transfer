@@ -44,11 +44,11 @@ jobs:
               echo "🔖 Adding label '$label_name'."
               gh issue edit "$pr_number" --add-label "$label_name"
             fi
-          else if grep -q "$label_name" <<< "$labels"; then
+          elif grep -q "$label_name" <<< "$labels"; then
             echo "🔖 Removing label '$label_name' (too old)."
             gh issue edit "$pr_number" --remove-label "$label_name"
           fi
-          fi
+
 
           # Block merging if label exists
           if gh pr view $pr_number --json labels --jq '.labels[].name' | grep -qx "$label_name"; then
