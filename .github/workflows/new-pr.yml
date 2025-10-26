@@ -15,7 +15,7 @@ jobs:
 
     env:
       PR_LABEL: 'New PR'
-      BLOCK_HOURS: '24' # e.g. 0.25 for testing
+      BLOCK_HOURS: '0.25' # e.g. 0.25 for testing
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
