@@ -16,18 +16,19 @@ jobs:
     env:
       PR_LABEL: 'New PR'
       BLOCK_HOURS: '0.25' # e.g. 0.25 for testing
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # DO NOT set GH_TOKEN here
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Authenticate gh CLI
+        # Pipe the secret into gh so it can store credentials.
         run: |
+          # Login using the token provided on stdin so gh will persist the auth state.
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
           gh auth setup-git
-          gh auth login --with-token <<< "${GH_TOKEN}"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # Note: no GH_TOKEN env exported here
 
       - name: Evaluate PR age and manage label
         run: |
@@ -51,7 +52,7 @@ jobs:
           should_block=$(python3 -c "print(float(${age_hours}) <= float(${BLOCK_HOURS}))")
           should_remove=$(python3 -c "print(float(${age_hours}) > float(${BLOCK_HOURS}))")
 
-          # Add or remove label as needed
+          # Add or remove label as needed using gh
           if [ "$should_block" = "True" ]; then
             if ! grep -qx "$label_name" <<< "$labels"; then
               echo "🔖 Adding label '$label_name'."
@@ -73,5 +74,3 @@ jobs:
           else
             echo "✅ PR is mergeable."
           fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
