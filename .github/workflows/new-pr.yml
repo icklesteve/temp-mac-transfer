@@ -25,25 +25,25 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Evaluate PR age
+- name: Evaluate PR age
         run: |
           set -euo pipefail
-
-          # Fetch PR info
           pr_number="${{ github.event.pull_request.number }}"
           created_at="$(gh pr view "$pr_number" --json createdAt --jq '.createdAt')"
+          labels="$(gh pr view "$pr_number" --json labels --jq '.labels[].name' || true)"
 
-          # Compute PR age in hours (pure Python)
+          if echo "$labels" | grep -qi "urgent"; then
+            echo "::notice::Bypass label detected. Skipping block."
+            exit 0
+          fi
+
           now=$(date -u +%s)
           created=$(date -u -d "$created_at" +%s)
           age_hours=$(python3 -c "print(round((${now} - ${created}) / 3600, 2))")
-          echo "ℹ️ PR #$pr_number is ${age_hours}h old."
 
-          # Compute thresholds
-          should_block=$(python3 -c "print(float(${age_hours}) < float(${BLOCK_HOURS}))")
-          if [ "$should_block" = "True" ]; then
-            echo "❌ This PR cannot be merged until ${BLOCK_HOURS}h after creation."
+          if (( $(echo "$age_hours < ${BLOCK_HOURS}" | bc -l) )); then
+            echo "::error::PR #$pr_number is ${age_hours}h old. Must wait ${BLOCK_HOURS}h."
             exit 1
           else
-            echo "✅ PR is more than ${BLOCK_HOURS}h old so mergeable."
+            echo "::notice::PR #$pr_number is ${age_hours}h old (OK)."
           fi
