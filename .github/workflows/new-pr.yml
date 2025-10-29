@@ -45,6 +45,7 @@ jobs:
             should_block=$(python3 -c "print(float(${age_hours}) < float(${BLOCK_HOURS}))")
             if [ "$should_block" = "True" ]; then
               echo "::error::PR #$pr_number is only ${age_hours}h old. Must wait at least ${BLOCK_HOURS}h before merging."
+              exit 1
             else
               echo "::notice::PR #$pr_number is ${age_hours}h old — OK to merge."
             fi
