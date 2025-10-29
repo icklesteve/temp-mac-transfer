@@ -28,22 +28,20 @@ jobs:
       - name: Evaluate PR age
         run: |
           set -euo pipefail
+
           pr_number="${{ github.event.pull_request.number }}"
           created_at="$(gh pr view "$pr_number" --json createdAt --jq '.createdAt')"
-          labels="$(gh pr view "$pr_number" --json labels --jq '.labels[].name' || true)"
-
-          if echo "$labels" | grep -qi "urgent"; then
-            echo "::notice::Bypass label detected. Skipping block."
-            exit 0
-          fi
 
           now=$(date -u +%s)
           created=$(date -u -d "$created_at" +%s)
           age_hours=$(python3 -c "print(round((${now} - ${created}) / 3600, 2))")
 
-          if (( $(echo "$age_hours < ${BLOCK_HOURS}" | bc -l) )); then
-            echo "::error::PR #$pr_number is ${age_hours}h old. Must wait ${BLOCK_HOURS}h."
+          echo "::notice::PR #$pr_number was created at $created_at (age: ${age_hours}h)."
+
+          should_block=$(python3 -c "print(float(${age_hours}) < float(${BLOCK_HOURS}))")
+          if [ "$should_block" = "True" ]; then
+            echo "::error::PR #$pr_number is only ${age_hours}h old. Must wait at least ${BLOCK_HOURS}h before merging."
             exit 1
           else
-            echo "::notice::PR #$pr_number is ${age_hours}h old (OK)."
+            echo "::notice::PR #$pr_number is ${age_hours}h old — OK to merge."
           fi
