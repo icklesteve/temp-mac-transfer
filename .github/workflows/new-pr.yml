@@ -25,7 +25,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-- name: Evaluate PR age
+      - name: Evaluate PR age
         run: |
           set -euo pipefail
           pr_number="${{ github.event.pull_request.number }}"
