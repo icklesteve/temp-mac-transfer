@@ -8,8 +8,7 @@ on:
     types: [opened, reopened, labeled, unlabeled, synchronize]
 
   schedule:
-    # - cron: '0 * * * *' # every hour on the hour (UTC)
-    cron: '*/5 * * * *' # every 5 minutes (UTC)
+    - cron: '17 * * * *' # runs at HH:17 every hour
 
 jobs:
   check-pr:
